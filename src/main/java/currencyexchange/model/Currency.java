@@ -50,6 +50,6 @@ public class Currency {
 
     @Override
     public String toString() {
-        return "Currency [id=" + id + ", currencyCode=" + currencyCode + ", fullName=" + fullName;
+        return "Currency [id=" + id + ", currencyCode=" + currencyCode + ", fullName=" + fullName + ", sign=" + sign + "]";
     }
 }

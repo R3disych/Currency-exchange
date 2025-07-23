@@ -1,4 +1,7 @@
-C:\Users\Unfortunately_Redis\Desktop\likeAJava\Currency-exchange\src\main\java\currencyexchange\model\Currency.java
-C:\Users\Unfortunately_Redis\Desktop\likeAJava\Currency-exchange\src\main\java\currencyexchange\util\DBUtil.java
-C:\Users\Unfortunately_Redis\Desktop\likeAJava\Currency-exchange\src\main\java\currencyexchange\dao\CurrencyDao.java
-C:\Users\Unfortunately_Redis\Desktop\likeAJava\Currency-exchange\src\main\java\currencyexchange\web\CurrenciesServlet.java
+C:\Users\лерочка\IdeaProjects\Currency-exchange\src\main\java\currencyexchange\controller\CurrencyController.java
+C:\Users\лерочка\IdeaProjects\Currency-exchange\src\main\java\currencyexchange\dao\CurrencyDao.java
+C:\Users\лерочка\IdeaProjects\Currency-exchange\src\main\java\currencyexchange\dto\CurrencyDto.java
+C:\Users\лерочка\IdeaProjects\Currency-exchange\src\main\java\currencyexchange\model\Currency.java
+C:\Users\лерочка\IdeaProjects\Currency-exchange\src\main\java\currencyexchange\util\DBUtil.java
+C:\Users\лерочка\IdeaProjects\Currency-exchange\src\main\java\currencyexchange\util\JsonUtil.java
+C:\Users\лерочка\IdeaProjects\Currency-exchange\src\main\java\currencyexchange\web\ApplicationServlet.java

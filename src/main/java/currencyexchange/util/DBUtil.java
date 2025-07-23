@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DBUtil {
     private static final String DB_URL = "jdbc:postgresql://localhost/currency-exchange";
     private static final String DB_USER = "postgres";
-    private static final String DB_PASSWORD = "pipipapa";
+    private static final String DB_PASSWORD = "pipipopa";
 
     public static Connection getConnection() throws SQLException {
         try {
