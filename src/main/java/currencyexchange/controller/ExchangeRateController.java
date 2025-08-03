@@ -2,11 +2,13 @@ package currencyexchange.controller;
 
 import currencyexchange.dao.CurrencyDao;
 import currencyexchange.dao.ExchangeRateDao;
+import currencyexchange.dto.MyError;
 import currencyexchange.model.ExchangeRate;
 import currencyexchange.util.JsonUtil;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.postgresql.gss.GSSOutputStream;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -24,21 +26,34 @@ public class ExchangeRateController extends HttpServlet {
                 JsonUtil.sendAsJson(response, exchangeRateDao.getAllExchangeRates());
             } catch (SQLException e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                JsonUtil.sendAsJson(response, new Error("Database error"));
+                JsonUtil.sendAsJson(response, new MyError("Database error: " + e.getMessage()));
             }
         } else {
+            String baseCode = pathInfo.substring(15, 18).toUpperCase();
+            String targetCode = pathInfo.substring(18, 21).toUpperCase();
 
+            try {
+                ExchangeRate exchangeRate = exchangeRateDao
+                        .getExchangeRateByCodes(baseCode, targetCode);
+                if (exchangeRate == null) {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    JsonUtil.sendAsJson(response, new MyError("Exchange rate not found"));
+                } else {
+                    JsonUtil.sendAsJson(response, exchangeRate);
+                }
+            } catch (SQLException e) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                JsonUtil.sendAsJson(response, new MyError("Database error: " + e.getMessage()));
+            }
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //String pathInfo = request.getPathInfo();
-        //System.out.println(pathInfo);
+        String pathInfo = request.getPathInfo();
         String baseCurrencyCode = request.getParameter("baseCurrencyCode");
         String targetCurrencyCode = request.getParameter("targetCurrencyCode");
         double rate = Double.parseDouble(request.getParameter("rate"));
-        System.out.println(rate);
 
         try {
             ExchangeRate exchangeRate = new ExchangeRate();
@@ -48,7 +63,23 @@ public class ExchangeRateController extends HttpServlet {
             JsonUtil.sendAsJson(response, exchangeRateDao.createExchangeRate(exchangeRate));
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            JsonUtil.sendAsJson(response, new Error("Database error: " + e.getMessage()));
+            JsonUtil.sendAsJson(response, new MyError("Database error: " + e.getMessage()));
+            e.printStackTrace();
+        }
+    }
+
+    protected void doPatch(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String pathInfo = request.getPathInfo();
+        double rate = Double.parseDouble(request.getParameter("rate"));
+
+        String baseCode = pathInfo.substring(15, 18).toUpperCase();
+        String targetCode = pathInfo.substring(18, 21).toUpperCase();
+
+        try {
+            JsonUtil.sendAsJson(response, exchangeRateDao.updateExchangeRate(baseCode, targetCode, rate));
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            JsonUtil.sendAsJson(response, new MyError("Database error: " + e.getMessage()));
         }
     }
 }

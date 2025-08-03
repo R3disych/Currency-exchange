@@ -35,7 +35,7 @@ public class CurrencyDao {
     }
 
     public Currency getCurrencyByCode(String code) throws SQLException {
-        try (Connection connection = DBUtil.getConnection();
+        try (Connection connection = DBUtil.getConnection();//лучше сделать через optional везде где я беру один элемент
              PreparedStatement pstmt = connection.prepareStatement(GET_BY_CODE_SQL_REQUEST)) {
 
             pstmt.setString(1, code);
@@ -51,7 +51,7 @@ public class CurrencyDao {
                 }
             }
         }
-        throw new SQLException("This currency doesn't exists");
+        throw new SQLException("This currency doesn't exists"); //лучше не создавать ошибки из не ошибки
     }
 
     public Currency getCurrencyById(int id) throws SQLException {

@@ -1,6 +1,7 @@
 package currencyexchange.controller;
 
 import currencyexchange.dao.CurrencyDao;
+import currencyexchange.dto.MyError;
 import currencyexchange.model.Currency;
 import currencyexchange.util.JsonUtil;
 import jakarta.servlet.ServletException;
@@ -18,6 +19,7 @@ public class CurrencyController extends HttpServlet {
     private final CurrencyDao currencyDao = new CurrencyDao();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //согласно схеме MVC, мы получаем доступ к дао из сервисов, лучше для каждого контроллера сделать сервис
         String pathInfo = request.getPathInfo();
 
         if (pathInfo.equals("/currencies")) {
@@ -25,21 +27,21 @@ public class CurrencyController extends HttpServlet {
                 JsonUtil.sendAsJson(response, currencyDao.getAllCurrencies());
             } catch (SQLException e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                JsonUtil.sendAsJson(response, Map.of("error", "Database error"));
+                JsonUtil.sendAsJson(response, new MyError("Database error: " + e.getMessage()));
             }
         } else {
-            String code = pathInfo.substring(12);
+            String code = pathInfo.substring(12).toUpperCase();
             try {
                 Currency currency = currencyDao.getCurrencyByCode(code);
                 if (currency == null) {
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                    JsonUtil.sendAsJson(response, new Error("Currency not found"));
+                    JsonUtil.sendAsJson(response, new MyError("Currency not found"));
                 } else {
                     JsonUtil.sendAsJson(response, currency);
                 }
             } catch (SQLException e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                JsonUtil.sendAsJson(response, new Error("Database error"));
+                JsonUtil.sendAsJson(response, new MyError("Database error: " + e.getMessage()));
             }
         }
     }
@@ -58,10 +60,10 @@ public class CurrencyController extends HttpServlet {
             JsonUtil.sendAsJson(response, currencyDao.createCurrency(currency));
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            JsonUtil.sendAsJson(response, new Error("Database error: " + e.getMessage()));
+            JsonUtil.sendAsJson(response, new MyError("Database error: " + e.getMessage()));
         } catch (IOException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            JsonUtil.sendAsJson(response, new Error("Invalid request body"));
+            JsonUtil.sendAsJson(response, new MyError("Database error: " + e.getMessage()));
         }
     }
 }

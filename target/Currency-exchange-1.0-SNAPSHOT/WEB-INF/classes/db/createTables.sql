@@ -12,7 +12,7 @@ CREATE TABLE exchange_rates (
     id SERIAL PRIMARY KEY NOT NULL,
     base_currency_id SMALLINT NOT NULL REFERENCES currencies (id),
     target_currency_id SMALLINT NOT NULL REFERENCES currencies (id),
-    rate DECIMAL(6) NOT NULL,
+    rate DECIMAL(3, 6) NOT NULL,
     UNIQUE (base_currency_id, target_currency_id)
 );
 

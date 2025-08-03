@@ -1,6 +1,7 @@
 package currencyexchange.web;
 
 import currencyexchange.controller.CurrencyController;
+import currencyexchange.controller.CurrencyExchangeController;
 import currencyexchange.controller.ExchangeRateController;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -21,6 +22,8 @@ public class ApplicationServlet extends HttpServlet {
             new CurrencyController().service(req, resp);
         } else if (path.contains("/api/exchangeRates")) {
             new ExchangeRateController().service(req, resp);
+        } else if (path.contains("/api/exchange")) {
+          new CurrencyExchangeController().service(req, resp);
         } else {
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
