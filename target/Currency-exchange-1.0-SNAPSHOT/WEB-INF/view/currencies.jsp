@@ -1,0 +1,29 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Currencies</title>
+</head>
+<body>
+<h1>Currencies</h1>
+<table>
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>CurrencyCode</th>
+        <th>FullName</th>
+        <th>Sign</th>
+    </tr>
+    </thead>
+    <tbody>
+    <c:forEach items="${currencies}" var="currency">
+        <tr>
+            <td>${currency.id}</td>
+            <td>${currency.currencyCode}</td>
+            <td>${currency.fullName}</td>
+            <td>${currency.sign}</td>
+        </tr>
+    </c:forEach>
+    </tbody>
+</table>
+</body>
+</html>
